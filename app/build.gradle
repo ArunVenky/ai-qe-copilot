@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     // This dependency is used by the application.
-    implementation libs.guava
+    implementation 'com.openai:openai-java:4.52.0'
 }
 
 testing {
@@ -40,5 +40,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'org.example.App'
+    mainClass = 'org.example.AiQeCopilot'
 }
