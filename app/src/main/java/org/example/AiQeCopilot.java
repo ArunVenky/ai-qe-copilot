@@ -3,10 +3,13 @@
  */
 package org.example;
 import com.openai.models.responses.Response;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.model.TestCase;
+import org.example.model.TestGenerationResult;
 
 public class AiQeCopilot {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         System.out.println("AI-QE Copilot started!");
         LlmClient llmClient = new LlmClient();
@@ -20,7 +23,34 @@ public class AiQeCopilot {
         System.out.println(prompt); 
        
         Response response = llmClient.ask(prompt);
-        System.out.println(response);
-        System.out.println("OpenAI call completed...");
+        String json = llmClient.extractText(response);
+        ObjectMapper objectMapper = new ObjectMapper();
+        TestGenerationResult result =
+         objectMapper.readValue(
+                json,
+                TestGenerationResult.class
+        );
+
+        System.out.println("\nGENERATED TEST CASES:");
+
+for (TestCase testCase : result.getTestCases()) {
+
+    System.out.println("--------------------");
+    System.out.println("ID: " + testCase.getId());
+    System.out.println("Type: " + testCase.getType());
+    System.out.println("Scenario: " + testCase.getScenario());
+    System.out.println("Expected: " + testCase.getExpectedResult());
+    System.out.println("Priority: " + testCase.getPriority());
+}
+
+System.out.println("\nCLARIFICATIONS:");
+
+for (String clarification : result.getClarifications()) {
+    System.out.println("- " + clarification);
+}
+//System.out.println("AI GENERATED JSON:");
+//System.out.println(json);
+       // System.out.println(response);
+        //System.out.println("OpenAI call completed...");
     }
 }

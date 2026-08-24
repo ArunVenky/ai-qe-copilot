@@ -20,4 +20,16 @@ public class LlmClient {
                         .build();
         return client.responses().create(params);
     }
+
+    public String extractText(Response response) {
+
+    return response.output().stream()
+            .flatMap(item -> item.message().stream())
+            .flatMap(message -> message.content().stream())
+            .flatMap(content -> content.outputText().stream())
+            .map(outputText -> outputText.text())
+            .findFirst()
+            .orElseThrow(() ->
+                    new IllegalStateException("No text returned by LLM"));
+}
 }

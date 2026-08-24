@@ -19,6 +19,7 @@ repositories {
 dependencies {
     // This dependency is used by the application.
     implementation 'com.openai:openai-java:4.52.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
 }
 
 testing {
